@@ -1,0 +1,9 @@
+{
+  "name": "nexus360-backend",
+  "version": "1.0.0",
+  "description": "NEXUS360 API for DGSN Data Platform",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js"
+  }
+}
