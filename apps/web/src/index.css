@@ -4,7 +4,7 @@
 
 @layer base {
   body {
-    @apply bg-navy-950 text-white;
+    @apply bg-black text-white;
     margin: 0;
     padding: 0;
   }
@@ -18,23 +18,4 @@
 
 #root {
   min-height: 100vh;
-}
-
-/* Responsive adjustments for forms and tables */
-@media (max-width: 768px) {
-  /* Make form inputs full width */
-  input, select, textarea {
-    font-size: 16px !important; /* Prevents zoom on focus in iOS */
-  }
-  
-  /* Make tables scrollable horizontally */
-  .overflow-x-auto {
-    -webkit-overflow-scrolling: touch;
-  }
-  
-  /* Adjust card padding */
-  .glass, .bg-navy-800\/50 {
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
 }

@@ -16,20 +16,21 @@ import { LeanDashboard } from './pages/dashboards/LeanDashboard';
 
 const AppHeader = ({ user }) => {
   const { t } = useTranslation();
-  
   return (
-    <div className="fixed top-0 right-0 left-64 h-16 bg-navy-900/95 backdrop-blur-sm border-b border-navy-700 z-40 flex items-center px-6">
-      <div className="flex-shrink-0 w-64">
-        <p className="text-gold-500 text-sm font-semibold truncate">
+    <div className="fixed top-0 right-0 left-0 md:left-64 h-16 bg-navy-900/95 backdrop-blur-sm border-b border-navy-700 z-40 flex items-center px-4 md:px-6">
+      {/* Spacer for mobile hamburger button */}
+      <div className="w-10 md:hidden" />
+      <div className="flex-1 text-center md:text-left md:flex-none md:w-64">
+        <p className="text-gold-500 text-xs md:text-sm font-semibold truncate">
           {t('welcome.greeting')} {user?.name} ({user?.role})
         </p>
       </div>
-      <div className="flex-1 text-center">
+      <div className="flex-1 text-center hidden md:block">
         <h1 className="text-xl font-bold text-gold-500">
           DGSN - {t('header.title')}
         </h1>
       </div>
-      <div className="flex-shrink-0 w-64 text-right">
+      <div className="flex-shrink-0 text-right">
         <LanguageSwitcher />
       </div>
     </div>
@@ -53,7 +54,8 @@ function App() {
     <div className="min-h-screen bg-navy-950">
       <Navigation user={user} onLogout={() => { localStorage.clear(); setUser(null); }} />
       <AppHeader user={user} />
-      <main className="ml-64 pt-16">
+      {/* ml-0 on mobile, ml-64 on desktop */}
+      <main className="ml-0 md:ml-64 pt-16">
         <Routes>
           <Route path="/" element={<Navigate to="/welcome" />} />
           <Route path="/welcome" element={<Welcome user={user} />} />
@@ -70,4 +72,5 @@ function App() {
     </div>
   );
 }
+
 export default App;
