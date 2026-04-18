@@ -1,7 +1,34 @@
 // Dashboard Embed Configuration with Role-Based Access
 
+// Define types
+export interface DashboardConfig {
+  title: string;
+  url: string;
+  description: string;
+}
+
+export interface DashboardURLs {
+  executive: DashboardConfig;
+  finance: DashboardConfig;
+  hr: DashboardConfig;
+  operations_incidents: DashboardConfig;
+  operations_risks: DashboardConfig;
+  logistics_fleet: DashboardConfig;
+  logistics_failures: DashboardConfig;
+  training: DashboardConfig;
+  lean: DashboardConfig;
+}
+
+export interface RestrictedDashboardURLs {
+  operations_incidents: DashboardConfig;
+  operations_risks: DashboardConfig;
+  logistics_fleet: DashboardConfig;
+  logistics_failures: DashboardConfig;
+  training: DashboardConfig;
+}
+
 // Full access dashboards (for DG, SUPER_ADMIN)
-export const FULL_DASHBOARD_URLS = {
+export const FULL_DASHBOARD_URLS: DashboardURLs = {
   executive: {
     title: "Direction Générale - Tableau de Bord Stratégique",
     url: "https://lookerstudio.google.com/embed/reporting/7bdba7fa-9b0e-4296-a5fd-b603b78ef6c1/page/dvotF",
@@ -50,7 +77,7 @@ export const FULL_DASHBOARD_URLS = {
 };
 
 // Restricted dashboards for Commissaire Divisionnaire (CD)
-export const RESTRICTED_DASHBOARD_URLS = {
+export const RESTRICTED_DASHBOARD_URLS: RestrictedDashboardURLs = {
   operations_incidents: {
     title: "Opérations - Suivi et Analyses des Incidents",
     url: "https://datastudio.google.com/embed/reporting/deb891f0-8c66-415e-917f-416fe203324d/page/p_7z9tkzbb2d",
@@ -78,30 +105,32 @@ export const RESTRICTED_DASHBOARD_URLS = {
   }
 };
 
-export const getDashboardUrlByRole = (userRole: string, dashboardKey: string): string => {
+export const getDashboardUrlByRole = (userRole: string, dashboardKey: keyof DashboardURLs): string => {
   if (userRole === 'SUPER_ADMIN' || userRole === 'DG') {
     return FULL_DASHBOARD_URLS[dashboardKey]?.url || "";
   }
   if (userRole === 'COMMISSAIRE') {
-    return RESTRICTED_DASHBOARD_URLS[dashboardKey]?.url || "";
+    const restrictedKey = dashboardKey as keyof RestrictedDashboardURLs;
+    return RESTRICTED_DASHBOARD_URLS[restrictedKey]?.url || "";
   }
   return "";
 };
 
-export const getDashboardTitle = (dashboardKey: string): string => {
+export const getDashboardTitle = (dashboardKey: keyof DashboardURLs): string => {
   return FULL_DASHBOARD_URLS[dashboardKey]?.title || "";
 };
 
-export const getDashboardDescription = (dashboardKey: string): string => {
+export const getDashboardDescription = (dashboardKey: keyof DashboardURLs): string => {
   return FULL_DASHBOARD_URLS[dashboardKey]?.description || "";
 };
 
-export const canAccessDashboard = (userRole: string, dashboardKey: string): boolean => {
+export const canAccessDashboard = (userRole: string, dashboardKey: keyof DashboardURLs): boolean => {
   if (userRole === 'SUPER_ADMIN' || userRole === 'DG') {
     return !!FULL_DASHBOARD_URLS[dashboardKey];
   }
   if (userRole === 'COMMISSAIRE') {
-    return !!RESTRICTED_DASHBOARD_URLS[dashboardKey];
+    const restrictedKey = dashboardKey as keyof RestrictedDashboardURLs;
+    return !!RESTRICTED_DASHBOARD_URLS[restrictedKey];
   }
   return false;
 };
