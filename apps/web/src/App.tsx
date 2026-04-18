@@ -18,18 +18,18 @@ const AppHeader = ({ user }) => {
   const { t } = useTranslation();
   
   return (
-    <div className="fixed top-0 right-0 left-0 md:left-64 h-16 bg-navy-900/95 backdrop-blur-sm border-b border-navy-700 z-30 flex items-center justify-between px-4 md:px-6">
-      <div className="hidden md:block flex-shrink-0 w-64">
+    <div className="fixed top-0 right-0 left-64 h-16 bg-navy-900/95 backdrop-blur-sm border-b border-navy-700 z-40 flex items-center px-6">
+      <div className="flex-shrink-0 w-64">
         <p className="text-gold-500 text-sm font-semibold truncate">
           {t('welcome.greeting')} {user?.name} ({user?.role})
         </p>
       </div>
       <div className="flex-1 text-center">
-        <h1 className="text-sm md:text-xl font-bold text-gold-500">
+        <h1 className="text-xl font-bold text-gold-500">
           DGSN - {t('header.title')}
         </h1>
       </div>
-      <div className="flex-shrink-0">
+      <div className="flex-shrink-0 w-64 text-right">
         <LanguageSwitcher />
       </div>
     </div>
@@ -53,7 +53,7 @@ function App() {
     <div className="min-h-screen bg-navy-950">
       <Navigation user={user} onLogout={() => { localStorage.clear(); setUser(null); }} />
       <AppHeader user={user} />
-      <main className="pt-16 md:ml-64">
+      <main className="ml-64 pt-16">
         <Routes>
           <Route path="/" element={<Navigate to="/welcome" />} />
           <Route path="/welcome" element={<Welcome user={user} />} />
