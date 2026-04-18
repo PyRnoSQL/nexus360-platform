@@ -5,8 +5,8 @@ WORKDIR /app
 # Copy package files
 COPY backend/package.json .
 
-# Install dependencies
-RUN npm install
+# Install dependencies using npm
+RUN npm install --no-audit --no-fund
 
 # Copy source code
 COPY backend/ .
