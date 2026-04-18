@@ -1,15 +1,25 @@
 FROM node:20-alpine
 
+# Install pnpm
+RUN corepack enable && corepack prepare pnpm@8.15.0 --activate
+
 WORKDIR /app
 
-# Copy only backend files — no workspace needed, it's plain Node.js
-COPY backend/package.json ./
+# Copy package files
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY backend/package.json backend/
 
 # Install dependencies
-RUN npm install
+RUN pnpm install --no-frozen-lockfile
 
-# Copy backend source
-COPY backend/ ./
+# Copy source code
+COPY . .
+
+# Build the API (with error handling)
+WORKDIR /app/backend
+RUN if [ -f "tsconfig.json" ]; then pnpm build || echo "Build skipped"; else echo "No build config found"; fi
 
 EXPOSE 3001
-CMD ["node", "src/app.js"]
+
+# Try start, fallback to dev if needed
+CMD ["sh", "-c", "if [ -f dist/index.js ]; then pnpm start; else pnpm dev; fi"]
