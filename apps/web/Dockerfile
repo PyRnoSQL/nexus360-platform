@@ -1,25 +1,30 @@
-FROM node:20-alpine AS builder
-
-RUN corepack enable && corepack prepare pnpm@8.15.0 --activate
+FROM node:18-alpine as builder
 
 WORKDIR /app
 
-# Copy workspace files from repo root
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-COPY apps/web/package.json apps/web/
+# Copy package files
+COPY apps/web/package.json .
 
-# Install all workspace deps
-RUN pnpm install --no-frozen-lockfile
+# Install dependencies
+RUN npm install
 
-# Copy frontend source
-COPY apps/web/ apps/web/
+# Copy source code
+COPY apps/web/ .
 
-# Build from the workspace root (not the subfolder)
-RUN pnpm --filter=@nexus360/web build
+# Build the app (if needed, or just copy)
+RUN npm run build || echo "No build script"
 
-# Production stage
-FROM nginx:alpine
-COPY --from=builder /app/apps/web/dist /usr/share/nginx/html
-RUN echo 'server { listen 80; location / { root /usr/share/nginx/html; try_files $uri $uri/ /index.html; } }' > /etc/nginx/conf.d/default.conf
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Copy built files or source
+COPY --from=builder /app/dist /app/dist
+COPY --from=builder /app/package.json /app/
+
+# Install serve
+RUN npm install -g serve
+
+EXPOSE 3000
+
+CMD ["serve", "-s", "dist", "-l", "3000"]

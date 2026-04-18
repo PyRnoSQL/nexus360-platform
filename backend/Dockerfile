@@ -1,12 +1,11 @@
-FROM node:20-alpine
+FROM node:18-alpine
 
 WORKDIR /app
 
 # Copy package files
-COPY backend/package.json backend/
+COPY backend/package.json .
 
 # Install dependencies
-WORKDIR /app/backend
 RUN npm install
 
 # Copy source code
