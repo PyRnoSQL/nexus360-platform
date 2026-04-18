@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-black text-white;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+@layer components {
+  .glass {
+    @apply bg-navy-800/50 backdrop-blur-sm border border-navy-700;
+  }
+}
+
+#root {
+  min-height: 100vh;
+}
