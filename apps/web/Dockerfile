@@ -1,4 +1,5 @@
-FROM node:18-alpine as builder
+# Build stage
+FROM node:18-alpine AS builder
 
 WORKDIR /app
 
@@ -11,20 +12,29 @@ RUN npm install --no-audit --no-fund
 # Copy source code
 COPY apps/web/ .
 
-# Build (if needed)
-RUN npm run build || echo "No build script"
+# Build the app
+RUN npm run build
 
-FROM node:18-alpine
+# Production stage with nginx
+FROM nginx:alpine
 
-WORKDIR /app
+# Copy built files from builder
+COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Copy dist or source
-COPY --from=builder /app/dist /app/dist
-COPY --from=builder /app/package.json /app/
+# Copy nginx config for SPA
+RUN echo 'server { 
+    listen 80; 
+    location / { 
+        root /usr/share/nginx/html; 
+        try_files $uri $uri/ /index.html; 
+    }
+    # Optional: Cache static assets
+    location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg)$ {
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+    }
+}' > /etc/nginx/conf.d/default.conf
 
-# Install serve globally
-RUN npm install -g serve
+EXPOSE 80
 
-EXPOSE 3000
-
-CMD ["serve", "-s", "dist", "-l", "3000", "--single"]
+CMD ["nginx", "-g", "daemon off;"]
