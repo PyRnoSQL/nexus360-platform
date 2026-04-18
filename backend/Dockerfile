@@ -1,24 +1,15 @@
-FROM node:20-alpine AS base
-RUN corepack enable && corepack prepare pnpm@8.15.0 --activate
+FROM node:20-alpine
 
 WORKDIR /app
 
-# Copy workspace config from monorepo root
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-
-# Copy backend package.json
-COPY backend/package.json backend/
+# Copy only backend files — no workspace needed, it's plain Node.js
+COPY backend/package.json ./
 
 # Install dependencies
-RUN pnpm install --frozen-lockfile
+RUN npm install
 
-# Copy full source
-COPY . .
-
-# Build the API
-RUN cd backend && pnpm build
-
-WORKDIR /app/backend
+# Copy backend source
+COPY backend/ ./
 
 EXPOSE 3001
-CMD ["pnpm", "start"]
+CMD ["node", "src/app.js"]
