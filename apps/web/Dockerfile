@@ -2,28 +2,20 @@
 FROM node:18-alpine AS builder
 
 WORKDIR /app
-
-# Copy package files
 COPY apps/web/package.json .
-
-# Install dependencies
 RUN npm install --no-audit --no-fund
-
-# Copy source code
 COPY apps/web/ .
-
-# Build the app
 RUN npm run build
 
-# Production stage with nginx
+# Production stage
 FROM nginx:alpine
 
-# Copy built files from builder
+# Copy built files
 COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Create nginx config file
-RUN echo 'server { listen 80; location / { root /usr/share/nginx/html; try_files $uri $uri/ /index.html; } }' > /etc/nginx/conf.d/default.conf
+# Create nginx config for port 8080
+RUN echo 'server { listen 8080; server_name _; root /usr/share/nginx/html; index index.html; location / { try_files $uri $uri/ /index.html; } }' > /etc/nginx/conf.d/default.conf
 
-EXPOSE 80
+EXPOSE 8080
 
 CMD ["nginx", "-g", "daemon off;"]
