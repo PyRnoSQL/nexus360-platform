@@ -13,10 +13,10 @@ export const Welcome = ({ user }) => {
   ];
 
   return (
-    <div className="p-8">
+    <div className="p-4 md:p-8">
       {/* Header Section */}
       <div className="mb-8 text-center">
-        <h1 className="text-5xl font-bold text-gold-500 tracking-wider mb-3">{t('welcome.title')}</h1>
+        <h1 className="text-4xl md:text-5xl font-bold text-gold-500 tracking-wider mb-3">{t('welcome.title')}</h1>
         <p className="text-xl text-white font-semibold">{t('welcome.subtitle')}</p>
         <div className="w-32 h-0.5 bg-gold-500/50 mx-auto my-4"></div>
       </div>
