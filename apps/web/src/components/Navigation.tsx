@@ -8,8 +8,7 @@ import {
 } from 'lucide-react';
 import { LanguageSwitcher } from './LanguageSwitcher';
 
-export const Navigation = ({ user, onLogout }) => {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+export const Navigation = ({ user, onLogout, isCollapsed, onCollapse }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
   const { t } = useTranslation();
@@ -48,7 +47,8 @@ export const Navigation = ({ user, onLogout }) => {
             key={item.path}
             to={item.path}
             onClick={onClickLink}
-            className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-all ${active ? 'bg-gold-500/10 text-gold-500 border border-gold-500/20' : 'text-gray-400 hover:bg-navy-800 hover:text-white'}`}
+            className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-all
+              ${active ? 'bg-gold-500/10 text-gold-500 border border-gold-500/20' : 'text-gray-400 hover:bg-navy-800 hover:text-white'}`}
           >
             <item.icon className="w-5 h-5 shrink-0" />
             <span className="text-sm">{item.label}</span>
@@ -59,7 +59,8 @@ export const Navigation = ({ user, onLogout }) => {
         <Link
           to="/forms"
           onClick={onClickLink}
-          className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-all ${location.pathname === '/forms' ? 'bg-gold-500/10 text-gold-500 border border-gold-500/20' : 'text-gray-400 hover:bg-navy-800 hover:text-white'}`}
+          className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-all
+            ${location.pathname === '/forms' ? 'bg-gold-500/10 text-gold-500 border border-gold-500/20' : 'text-gray-400 hover:bg-navy-800 hover:text-white'}`}
         >
           <FileText className="w-5 h-5 shrink-0" />
           <span className="text-sm">{t('nav.forms')}</span>
@@ -70,7 +71,7 @@ export const Navigation = ({ user, onLogout }) => {
 
   return (
     <>
-      {/* ── MOBILE hamburger button ── */}
+      {/* ── MOBILE hamburger ── */}
       <button
         onClick={() => setMobileOpen(true)}
         className="md:hidden fixed top-4 left-4 z-50 p-2 bg-navy-900 border border-navy-700 rounded-lg text-gold-500"
@@ -119,7 +120,7 @@ export const Navigation = ({ user, onLogout }) => {
           {!isCollapsed && <div><h1 className="text-xl font-bold text-gold-500">NEXUS360</h1><p className="text-xs text-gray-500">DGSN</p></div>}
           {isCollapsed && <Shield className="w-6 h-6 text-gold-500" />}
           <button
-            onClick={() => setIsCollapsed(!isCollapsed)}
+            onClick={() => onCollapse(!isCollapsed)}
             className="p-1 hover:bg-navy-800 rounded-lg absolute -right-3 top-20 bg-navy-700 border border-navy-600 rounded-full"
           >
             {isCollapsed ? <ChevronRight className="w-4 h-4 text-gold-500" /> : <ChevronLeft className="w-4 h-4 text-gold-500" />}
@@ -132,7 +133,9 @@ export const Navigation = ({ user, onLogout }) => {
               <Link
                 key={item.path}
                 to={item.path}
-                className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-all ${active ? 'bg-gold-500/10 text-gold-500 border border-gold-500/20' : 'text-gray-400 hover:bg-navy-800 hover:text-white'} ${isCollapsed ? 'justify-center' : ''}`}
+                className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-all
+                  ${active ? 'bg-gold-500/10 text-gold-500 border border-gold-500/20' : 'text-gray-400 hover:bg-navy-800 hover:text-white'}
+                  ${isCollapsed ? 'justify-center' : ''}`}
                 title={isCollapsed ? item.label : ''}
               >
                 <item.icon className="w-5 h-5 shrink-0" />
@@ -143,7 +146,9 @@ export const Navigation = ({ user, onLogout }) => {
           {canAccessForms && (
             <Link
               to="/forms"
-              className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-all ${location.pathname === '/forms' ? 'bg-gold-500/10 text-gold-500 border border-gold-500/20' : 'text-gray-400 hover:bg-navy-800 hover:text-white'} ${isCollapsed ? 'justify-center' : ''}`}
+              className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-all
+                ${location.pathname === '/forms' ? 'bg-gold-500/10 text-gold-500 border border-gold-500/20' : 'text-gray-400 hover:bg-navy-800 hover:text-white'}
+                ${isCollapsed ? 'justify-center' : ''}`}
               title={isCollapsed ? t('nav.forms') : ''}
             >
               <FileText className="w-5 h-5 shrink-0" />

@@ -14,12 +14,12 @@ import { LogistiqueDashboard } from './pages/dashboards/LogistiqueDashboard';
 import { FormationDashboard } from './pages/dashboards/FormationDashboard';
 import { LeanDashboard } from './pages/dashboards/LeanDashboard';
 
-const AppHeader = ({ user }) => {
+const AppHeader = ({ user, sidebarCollapsed }) => {
   const { t } = useTranslation();
   const userName = user?.name || user?.username || 'Utilisateur';
   const userRole = user?.role || '';
   return (
-    <div className="fixed top-0 right-0 left-0 md:left-64 h-16 bg-navy-900/95 backdrop-blur-sm border-b border-navy-700 z-40 flex items-center px-4 md:px-6">
+    <div className={`fixed top-0 right-0 left-0 md:transition-all md:duration-300 ${sidebarCollapsed ? 'md:left-20' : 'md:left-64'} h-16 bg-navy-900/95 backdrop-blur-sm border-b border-navy-700 z-40 flex items-center px-4 md:px-6`}>
       <div className="w-10 md:hidden" />
       <div className="flex-1 text-center md:text-left md:flex-none md:w-64">
         <p className="text-gold-500 text-xs md:text-sm font-semibold truncate">
@@ -27,7 +27,7 @@ const AppHeader = ({ user }) => {
         </p>
       </div>
       <div className="flex-1 text-center hidden md:block">
-        <h1 className="text-xl font-bold text-gold-500">
+        <h1 className="text-xl font-bold text-gold-500 whitespace-nowrap">
           DGSN - {t('header.title')}
         </h1>
       </div>
@@ -40,6 +40,7 @@ const AppHeader = ({ user }) => {
 
 function App() {
   const [user, setUser] = useState(null);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const { i18n } = useTranslation();
 
   useEffect(() => {
@@ -53,9 +54,14 @@ function App() {
 
   return (
     <div className="min-h-screen bg-navy-950">
-      <Navigation user={user} onLogout={() => { localStorage.clear(); setUser(null); }} />
-      <AppHeader user={user} />
-      <main className="ml-0 md:ml-64 pt-16">
+      <Navigation
+        user={user}
+        onLogout={() => { localStorage.clear(); setUser(null); }}
+        isCollapsed={sidebarCollapsed}
+        onCollapse={setSidebarCollapsed}
+      />
+      <AppHeader user={user} sidebarCollapsed={sidebarCollapsed} />
+      <main className={`ml-0 md:transition-all md:duration-300 ${sidebarCollapsed ? 'md:ml-20' : 'md:ml-64'} pt-16`}>
         <Routes>
           <Route path="/" element={<Navigate to="/welcome" />} />
           <Route path="/welcome" element={<Welcome user={user} />} />
