@@ -99,7 +99,8 @@ export const Login = ({ onLogin }) => {
           
           <div className="p-6">
             {/* Police badge icon - larger size */}
-            <div className="flex justify-center mb-5">
+            <div className="text-center mb-5">
+              <p className="text-gold-500 font-bold tracking-widest text-lg mb-3">NEXUS360</p>
               <div className="p-3 bg-gold-500/10 rounded-full border-2 border-gold-500/30">
                 <Shield className="w-8 h-8 text-gold-500" />
               </div>
