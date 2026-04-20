@@ -40,7 +40,6 @@ export const Login = ({ onLogin }) => {
   return (
     <div className="min-h-screen bg-black flex items-center justify-center p-4">
       <div className="max-w-md w-full">
-
         {/* Decorative top border */}
         <div className="flex justify-center gap-1 mb-4">
           <div className="w-8 h-px bg-gold-500/40"></div>
@@ -48,13 +47,13 @@ export const Login = ({ onLogin }) => {
           <div className="w-2 h-px bg-gold-500/10"></div>
         </div>
 
-        {/* Republic header */}
+        {/* Republic header - small */}
         <div className="text-center mb-2">
           <p className="text-xs text-gold-500/80 tracking-wider">RÉPUBLIQUE DU CAMEROUN</p>
           <p className="text-[10px] text-gold-500/60 mt-0.5">Paix - Travail - Patrie</p>
         </div>
 
-        {/* Main Title */}
+        {/* Main Title - Large, Gold */}
         <div className="text-center mb-6">
           <h1 className="text-xl md:text-2xl font-bold text-gold-500 tracking-wide">
             DÉLÉGATION GÉNÉRALE À LA<br />SÛRETÉ NATIONALE
@@ -62,17 +61,24 @@ export const Login = ({ onLogin }) => {
           <div className="w-16 h-px bg-gradient-to-r from-transparent via-gold-500/40 to-transparent mx-auto mt-3"></div>
         </div>
 
-        {/* Logo */}
+        {/* Logo - Cameroon logo with transparent background */}
         <div className="flex justify-center items-center mb-8">
           <div className="relative">
+            {/* Subtle glow behind logo */}
             <div className="absolute inset-0 bg-gold-500/5 rounded-full blur-xl"></div>
-            <div className="relative w-36 h-36 md:w-40 md:h-40 flex items-center justify-center">
-              <img
-                src="/logo1.png"
-                alt="République du Cameroun"
+            
+            {/* Logo Image - transparent background */}
+            <div className="relative w-32 h-32 md:w-36 md:h-36 flex items-center justify-center">
+              <img 
+                src="/logo1.png" 
+                alt="République du Cameroun" 
                 className="w-full h-full object-contain"
-                style={{ background: 'transparent', filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.2))' }}
+                style={{ 
+                  background: 'transparent',
+                  filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.2))'
+                }}
                 onError={(e) => {
+                  console.error('Logo failed to load');
                   e.target.style.display = 'none';
                 }}
               />
@@ -80,15 +86,13 @@ export const Login = ({ onLogin }) => {
           </div>
         </div>
 
-        {/* Login Form */}
-        <div className="rounded-xl border-2 border-gold-500/30 shadow-2xl overflow-hidden" style={{ backgroundColor: '#03396c' }}>
+        {/* Login Form - Dark blue background with visible border */}
+        <div className="bg-navy-900/90 backdrop-blur-sm rounded-xl border-2 border-gold-500/30 shadow-2xl overflow-hidden">
           <div className="h-0.5 bg-gradient-to-r from-gold-500/0 via-gold-500 to-gold-500/0"></div>
-
+          
           <div className="p-6">
-
-            {/* NEXUS360 label + Shield icon */}
-            <div className="flex flex-col items-center mb-5">
-              <p className="text-gold-500 font-bold tracking-widest text-lg mb-3">NEXUS360</p>
+            {/* Police badge icon - larger size */}
+            <div className="flex justify-center mb-5">
               <div className="p-3 bg-gold-500/10 rounded-full border-2 border-gold-500/30">
                 <Shield className="w-8 h-8 text-gold-500" />
               </div>
@@ -96,48 +100,48 @@ export const Login = ({ onLogin }) => {
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-xs font-medium text-gray-300 mb-1.5">
+                <label className="block text-xs font-medium text-gray-400 mb-1.5">
                   <Fingerprint className="inline w-3 h-3 mr-1" /> IDENTIFIANT
                 </label>
                 <div className="relative">
-                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                  <input
-                    type="text"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2.5 bg-black/30 border border-gold-500/30 rounded-lg text-white text-sm focus:border-gold-500 focus:outline-none focus:ring-2 focus:ring-gold-500/30 transition-all"
-                    placeholder="Nom d'utilisateur"
-                    required
+                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+                  <input 
+                    type="text" 
+                    value={username} 
+                    onChange={(e) => setUsername(e.target.value)} 
+                    className="w-full pl-10 pr-4 py-2.5 bg-navy-800/80 border border-navy-600 rounded-lg text-white text-sm focus:border-gold-500 focus:outline-none focus:ring-2 focus:ring-gold-500/30 transition-all" 
+                    placeholder="Nom d'utilisateur" 
+                    required 
                   />
                 </div>
               </div>
-
+              
               <div>
-                <label className="block text-xs font-medium text-gray-300 mb-1.5">
+                <label className="block text-xs font-medium text-gray-400 mb-1.5">
                   <Lock className="inline w-3 h-3 mr-1" /> MOT DE PASSE
                 </label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                  <input
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2.5 bg-black/30 border border-gold-500/30 rounded-lg text-white text-sm focus:border-gold-500 focus:outline-none focus:ring-2 focus:ring-gold-500/30 transition-all"
-                    placeholder="••••••••"
-                    required
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+                  <input 
+                    type="password" 
+                    value={password} 
+                    onChange={(e) => setPassword(e.target.value)} 
+                    className="w-full pl-10 pr-4 py-2.5 bg-navy-800/80 border border-navy-600 rounded-lg text-white text-sm focus:border-gold-500 focus:outline-none focus:ring-2 focus:ring-gold-500/30 transition-all" 
+                    placeholder="••••••••" 
+                    required 
                   />
                 </div>
               </div>
-
+              
               {error && (
                 <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-2">
                   <p className="text-red-400 text-xs text-center">{error}</p>
                 </div>
               )}
-
-              <button
-                type="submit"
-                disabled={loading}
+              
+              <button 
+                type="submit" 
+                disabled={loading} 
                 className="w-full py-2.5 bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-600 hover:to-gold-700 text-navy-900 font-bold text-sm rounded-lg transition-all transform hover:scale-[1.02] disabled:opacity-50 shadow-lg shadow-gold-500/20"
               >
                 {loading ? (
@@ -156,7 +160,7 @@ export const Login = ({ onLogin }) => {
           </div>
         </div>
 
-        {/* Powered by */}
+        {/* Powered by - Outside the rectangle */}
         <div className="text-center mt-5">
           <p className="text-[11px] text-gray-600">
             Powered by <span className="text-gold-500/70 font-medium">Analytix Engineering</span>
@@ -169,7 +173,6 @@ export const Login = ({ onLogin }) => {
             © 2026 Délégation Générale à la Sûreté Nationale du Cameroun
           </p>
         </div>
-
       </div>
     </div>
   );
