@@ -86,12 +86,17 @@ export const Login = ({ onLogin }) => {
           </div>
         </div>
 
-        {/* Login Form - Dark blue background with visible border */}
-        <div className="bg-navy-900/90 backdrop-blur-sm rounded-xl border-2 border-gold-500/30 shadow-2xl overflow-hidden">
+        {/* Login Form - BLUE background with visible border (#03396c) */}
+        <div className="rounded-xl border-2 border-gold-500/30 shadow-2xl overflow-hidden" style={{ backgroundColor: '#03396c' }}>
           <div className="h-0.5 bg-gradient-to-r from-gold-500/0 via-gold-500 to-gold-500/0"></div>
           
           <div className="p-6">
-            {/* Police badge icon - larger size */}
+            {/* NEXUS360 text inside the card */}
+            <div className="text-center mb-4">
+              <h2 className="text-2xl font-bold text-gold-500">NEXUS360</h2>
+            </div>
+
+            {/* Police badge icon */}
             <div className="flex justify-center mb-5">
               <div className="p-3 bg-gold-500/10 rounded-full border-2 border-gold-500/30">
                 <Shield className="w-8 h-8 text-gold-500" />
@@ -100,16 +105,16 @@ export const Login = ({ onLogin }) => {
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-xs font-medium text-gray-400 mb-1.5">
+                <label className="block text-xs font-medium text-gray-300 mb-1.5">
                   <Fingerprint className="inline w-3 h-3 mr-1" /> IDENTIFIANT
                 </label>
                 <div className="relative">
-                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                   <input 
                     type="text" 
                     value={username} 
                     onChange={(e) => setUsername(e.target.value)} 
-                    className="w-full pl-10 pr-4 py-2.5 bg-navy-800/80 border border-navy-600 rounded-lg text-white text-sm focus:border-gold-500 focus:outline-none focus:ring-2 focus:ring-gold-500/30 transition-all" 
+                    className="w-full pl-10 pr-4 py-2.5 bg-black/30 border border-gold-500/30 rounded-lg text-white text-sm focus:border-gold-500 focus:outline-none focus:ring-2 focus:ring-gold-500/30 transition-all" 
                     placeholder="Nom d'utilisateur" 
                     required 
                   />
@@ -117,16 +122,16 @@ export const Login = ({ onLogin }) => {
               </div>
               
               <div>
-                <label className="block text-xs font-medium text-gray-400 mb-1.5">
+                <label className="block text-xs font-medium text-gray-300 mb-1.5">
                   <Lock className="inline w-3 h-3 mr-1" /> MOT DE PASSE
                 </label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                   <input 
                     type="password" 
                     value={password} 
                     onChange={(e) => setPassword(e.target.value)} 
-                    className="w-full pl-10 pr-4 py-2.5 bg-navy-800/80 border border-navy-600 rounded-lg text-white text-sm focus:border-gold-500 focus:outline-none focus:ring-2 focus:ring-gold-500/30 transition-all" 
+                    className="w-full pl-10 pr-4 py-2.5 bg-black/30 border border-gold-500/30 rounded-lg text-white text-sm focus:border-gold-500 focus:outline-none focus:ring-2 focus:ring-gold-500/30 transition-all" 
                     placeholder="••••••••" 
                     required 
                   />
