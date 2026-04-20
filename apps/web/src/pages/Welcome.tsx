@@ -5,9 +5,6 @@ import { Shield, Wallet, Users, MapPin, Truck, GraduationCap, TrendingUp, Zap } 
 export const Welcome = ({ user }) => {
   const { t } = useTranslation();
   
-  // Debug: log the user object
-  console.log("Welcome page user:", user);
-  
   const stats = [
     { value: '10', label: t('welcome.regions'), icon: MapPin, color: 'text-blue-500' },
     { value: '58', label: t('welcome.cities'), icon: MapPin, color: 'text-green-500' },
@@ -15,20 +12,9 @@ export const Welcome = ({ user }) => {
     { value: '24/7', label: t('welcome.availability'), icon: Zap, color: 'text-gold-500' },
   ];
 
-  // Get user name safely
-  const userName = user?.name || user?.username || 'Utilisateur';
-  const userRole = user?.role || '';
-
   return (
     <div className="p-4 md:p-8">
-      {/* Welcome greeting at top */}
-      <div className="mb-6">
-        <p className="text-gold-500 text-lg font-semibold">
-          {t('welcome.greeting')} {userName} ({userRole})
-        </p>
-      </div>
-
-      {/* Header Section */}
+      {/* Header Section - Directly NEXUS360 without greeting */}
       <div className="mb-8 text-center">
         <h1 className="text-3xl md:text-5xl font-bold text-gold-500 tracking-wider mb-3">{t('welcome.title')}</h1>
         <p className="text-lg md:text-xl text-white font-semibold">{t('welcome.subtitle')}</p>
