@@ -12,8 +12,21 @@ export const Login = ({ onLogin }) => {
     setLoading(true);
     setError('');
 
-    // Always normalize to lowercase for comparison
+    // Normalize OUTSIDE try/catch so it's available everywhere
     const normalizedUsername = username.trim().toLowerCase();
+
+    const roleMap = {
+      op:    'OFFICIER',
+      admin: 'SUPER_ADMIN',
+      cd:    'COMMISSAIRE',
+      dg:    'DG'
+    };
+    const nameMap = {
+      op:    'Officier',
+      admin: 'Super Administrateur',
+      cd:    'Commissaire',
+      dg:    'Délégué Général'
+    };
 
     try {
       const res = await fetch('/api/auth/login', {
@@ -30,19 +43,7 @@ export const Login = ({ onLogin }) => {
         setError('Identifiants invalides');
       }
     } catch {
-      const roleMap = {
-        op:    'OFFICIER',
-        admin: 'SUPER_ADMIN',
-        cd:    'COMMISSAIRE',
-        dg:    'DG'
-      };
-      const nameMap = {
-        op:    'Officier',
-        admin: 'Super Administrateur',
-        cd:    'Commissaire',
-        dg:    'Délégué Général'
-      };
-
+      // Fallback local auth when backend is unreachable
       if (password === '1234' && roleMap[normalizedUsername]) {
         onLogin({
           id: '1',
@@ -101,7 +102,6 @@ export const Login = ({ onLogin }) => {
         {/* Login Form */}
         <div className="rounded-xl border-2 border-gold-500/30 shadow-2xl overflow-hidden" style={{ backgroundColor: '#03396c' }}>
           <div className="h-0.5 bg-gradient-to-r from-gold-500/0 via-gold-500 to-gold-500/0"></div>
-
           <div className="p-6">
 
             {/* NEXUS360 label + Shield icon */}
