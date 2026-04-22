@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { LayoutDashboard, ExternalLink, AlertCircle, Maximize2, RefreshCw, Lock } from 'lucide-react';
+import { ExternalLink, AlertCircle, Maximize2, RefreshCw, Lock, Shield } from 'lucide-react';
 
 interface DashboardEmbedProps {
   title: string;
@@ -8,13 +8,18 @@ interface DashboardEmbedProps {
   userRole?: string;
 }
 
-export const DashboardEmbed: React.FC<DashboardEmbedProps> = ({ title, embedUrl, description, userRole }) => {
+export const DashboardEmbed: React.FC<DashboardEmbedProps> = ({
+  title,
+  embedUrl,
+  description,
+  userRole
+}) => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
-  const isConfigured = embedUrl && embedUrl !== "";
+  const isConfigured = embedUrl && embedUrl !== '';
 
   useEffect(() => {
     setIsLoading(true);
@@ -22,13 +27,11 @@ export const DashboardEmbed: React.FC<DashboardEmbedProps> = ({ title, embedUrl,
   }, [embedUrl]);
 
   const handleIframeLoad = () => {
-    console.log("Iframe loaded successfully:", title);
     setIsLoading(false);
     setError(false);
   };
 
   const handleIframeError = () => {
-    console.error("Iframe failed to load:", title);
     setIsLoading(false);
     setError(true);
   };
@@ -37,42 +40,56 @@ export const DashboardEmbed: React.FC<DashboardEmbedProps> = ({ title, embedUrl,
     setIsLoading(true);
     setError(false);
     if (iframeRef.current) {
-      const src = iframeRef.current.src;
-      iframeRef.current.src = src;
+      iframeRef.current.src = iframeRef.current.src;
     }
-  };
-
-  const toggleFullscreen = () => {
-    setIsFullscreen(!isFullscreen);
   };
 
   if (!isConfigured) {
     return (
       <div className="glass rounded-xl p-8">
         <div className="text-center">
-          <div className="w-16 h-16 bg-yellow-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Lock className="w-8 h-8 text-yellow-500" />
+          <div className="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Lock className="w-8 h-8 text-red-500" />
           </div>
           <h3 className="text-xl font-semibold text-white mb-2">Accès non autorisé</h3>
-          <p className="text-gray-400">
-            Vous n'avez pas les droits d'accès à ce dashboard.
-          </p>
-          <p className="text-sm text-gray-500 mt-2">
-            Veuillez contacter votre administrateur.
-          </p>
+          <p className="text-gray-400">Vous n'avez pas les droits d'accès à ce dashboard.</p>
+          <p className="text-sm text-gray-500 mt-2">Veuillez contacter votre administrateur.</p>
         </div>
       </div>
     );
   }
 
-  const embedSrc = embedUrl.includes('?') ? `${embedUrl}&rm=minimal` : `${embedUrl}?rm=minimal`;
+  // Lock to exact page:
+  // rm=minimal  → hides Looker Studio top bar
+  // nf=true     → hides page navigation footer
+  // ns=true     → hides the page selector panel
+  const buildLockedUrl = (url: string) => {
+    const base = url.split('?')[0];
+    const params = new URLSearchParams({
+      rm: 'minimal',
+      nf: 'true',
+      ns: 'true',
+    });
+    return `${base}?${params.toString()}`;
+  };
+
+  const lockedUrl = buildLockedUrl(embedUrl);
 
   return (
     <div className={`glass rounded-xl overflow-hidden transition-all duration-300 ${isFullscreen ? 'fixed inset-4 z-50 bg-navy-950' : ''}`}>
+
+      {/* Header bar */}
       <div className="p-4 border-b border-navy-700 bg-navy-800/50 flex justify-between items-center flex-wrap gap-2">
-        <div>
-          <h2 className="text-lg font-semibold text-white">{title}</h2>
-          {description && <p className="text-xs text-gray-400 mt-1">{description}</p>}
+        <div className="flex items-center gap-2">
+          {/* Security badge */}
+          <div className="flex items-center gap-1 px-2 py-0.5 bg-gold-500/10 border border-gold-500/20 rounded-full">
+            <Shield className="w-3 h-3 text-gold-500" />
+            <span className="text-[10px] text-gold-500 font-semibold tracking-wider">CLASSIFIÉ</span>
+          </div>
+          <div>
+            <h2 className="text-lg font-semibold text-white">{title}</h2>
+            {description && <p className="text-xs text-gray-400 mt-0.5">{description}</p>}
+          </div>
         </div>
         <div className="flex gap-2">
           <button
@@ -83,64 +100,104 @@ export const DashboardEmbed: React.FC<DashboardEmbedProps> = ({ title, embedUrl,
             <RefreshCw className="w-4 h-4 text-gray-400" />
           </button>
           <button
-            onClick={toggleFullscreen}
+            onClick={() => setIsFullscreen(!isFullscreen)}
             className="p-2 hover:bg-navy-700 rounded-lg transition-colors"
-            title={isFullscreen ? "Quitter plein écran" : "Plein écran"}
+            title={isFullscreen ? 'Quitter plein écran' : 'Plein écran'}
           >
             <Maximize2 className="w-4 h-4 text-gray-400" />
           </button>
-          <a
-            href={embedUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="p-2 hover:bg-navy-700 rounded-lg transition-colors"
-            title="Ouvrir dans un nouvel onglet"
-          >
-            <ExternalLink className="w-4 h-4 text-gray-400" />
-          </a>
+          {/* External link removed — prevents users escaping to full Looker Studio */}
         </div>
       </div>
 
-      <div className="relative" style={{ height: isFullscreen ? 'calc(100vh - 80px)' : '600px' }}>
+      {/* Watermark bar — gives it a classified feel */}
+      <div className="bg-navy-900/80 border-b border-gold-500/10 px-4 py-1 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <Lock className="w-3 h-3 text-gold-500/50" />
+          <span className="text-[10px] text-gold-500/50 tracking-widest font-mono">
+            NEXUS360 · DGSN · ACCÈS RESTREINT
+          </span>
+        </div>
+        <span className="text-[10px] text-gray-600 font-mono">
+          {userRole} · {new Date().toLocaleDateString('fr-FR')}
+        </span>
+      </div>
+
+      {/* iframe container */}
+      <div
+        className="relative"
+        style={{ height: isFullscreen ? 'calc(100vh - 100px)' : '620px' }}
+      >
+        {/* Loading spinner */}
         {isLoading && (
           <div className="absolute inset-0 flex items-center justify-center bg-navy-900/80 z-10">
             <div className="text-center">
               <div className="w-12 h-12 border-4 border-gold-500/30 border-t-gold-500 rounded-full animate-spin mx-auto mb-4"></div>
-              <p className="text-gray-400">Chargement du dashboard...</p>
+              <p className="text-gray-400 text-sm">Chargement sécurisé...</p>
+              <p className="text-gray-600 text-xs mt-1">NEXUS360 · DGSN</p>
             </div>
           </div>
         )}
-        
+
+        {/* Error state */}
         {error ? (
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="text-center max-w-md p-6">
               <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
-              <p className="text-red-400 font-semibold mb-2">Erreur de chargement du dashboard</p>
+              <p className="text-red-400 font-semibold mb-2">Erreur de chargement</p>
               <p className="text-sm text-gray-500 mb-4">
-                Vérifiez que le dashboard est correctement partagé.
+                Vérifiez que le dashboard est correctement partagé et réessayez.
               </p>
               <button
                 onClick={handleRetry}
-                className="px-4 py-2 bg-gold-500 hover:bg-gold-600 text-navy-900 rounded-lg transition-colors"
+                className="px-4 py-2 bg-gold-500 hover:bg-gold-600 text-navy-900 rounded-lg transition-colors font-semibold"
               >
                 Réessayer
               </button>
             </div>
           </div>
         ) : (
-          <iframe
-            ref={iframeRef}
-            src={embedSrc}
-            title={title}
-            className="w-full h-full border-0"
-            allow="fullscreen"
-            onLoad={handleIframeLoad}
-            onError={handleIframeError}
-            sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-storage-access-by-user-activation allow-popups-to-escape-sandbox"
-            referrerPolicy="no-referrer-when-downgrade"
-          />
+          <>
+            <iframe
+              ref={iframeRef}
+              src={lockedUrl}
+              title={title}
+              className="w-full h-full border-0"
+              allow="fullscreen"
+              onLoad={handleIframeLoad}
+              onError={handleIframeError}
+              sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-storage-access-by-user-activation allow-popups-to-escape-sandbox"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+
+            {/* ── NAVIGATION BLOCKER OVERLAYS ──
+                These invisible divs sit on top of the Looker Studio
+                page navigation arrows (bottom-left and bottom-right)
+                so users cannot click them to browse other pages.
+                They are pointer-events:all so clicks are absorbed.    */}
+            {/* Block bottom navigation bar (page arrows) */}
+            <div
+              className="absolute bottom-0 left-0 right-0 bg-navy-950"
+              style={{ height: '48px', zIndex: 5 }}
+            />
+            {/* Block top Looker Studio header (just in case rm=minimal fails) */}
+            <div
+              className="absolute top-0 left-0 right-0 bg-navy-950"
+              style={{ height: '4px', zIndex: 5 }}
+            />
+          </>
         )}
       </div>
+
+      {/* Secure footer */}
+      <div className="px-4 py-2 bg-navy-900/50 border-t border-navy-700/50 flex items-center justify-between">
+        <div className="flex items-center gap-1">
+          <Shield className="w-3 h-3 text-green-500/60" />
+          <span className="text-[10px] text-green-500/60">Vue sécurisée · Navigation désactivée</span>
+        </div>
+        <span className="text-[10px] text-gray-700">© DGSN {new Date().getFullYear()}</span>
+      </div>
+
     </div>
   );
 };
