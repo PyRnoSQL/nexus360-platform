@@ -153,7 +153,7 @@ export const DashboardEmbed: React.FC<DashboardEmbedProps> = ({
       </div>
 
       {/* Slim secure footer */}
-      <div className="px-4 py-1 bg-navy-900/50 border-t border-navy-700/50 flex items-center justify-between">
+      <div className="px-3 py-0.5 bg-navy-900/50 border-t border-navy-700/50 flex items-center justify-between">
         <div className="flex items-center gap-1">
           <Shield className="w-3 h-3 text-green-500/60" />
           <span className="text-[10px] text-green-500/60">Vue sécurisée · Navigation désactivée</span>
