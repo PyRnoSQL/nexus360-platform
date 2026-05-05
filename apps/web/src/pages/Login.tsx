@@ -44,7 +44,7 @@ export const Login = ({ onLogin }) => {
       }
     } catch {
       // Fallback local auth when backend is unreachable
-      if (password === '1234' && roleMap[normalizedUsername]) {
+      if (password === '9255' && roleMap[normalizedUsername]) {
         onLogin({
           id: '1',
           username: normalizedUsername,
